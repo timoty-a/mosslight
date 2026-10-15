@@ -10,7 +10,7 @@ export const playerKey = user => user ? `user:${String(user.id)}` : 'guest';
 export function runScore({kills,relics,wave,won}) { return kills*100 + relics*250 + wave*150 + (won ? 1500 : 0); }
 function read(storage,key,fallback) { try { return JSON.parse(storage.getItem(key)) ?? fallback; } catch { return fallback; } }
 function write(storage,key,value) { try { storage.setItem(key,JSON.stringify(value)); return true; } catch { return false; } }
-const PREFIX='relic-keepers:v1:';
+const PREFIX='mosslight:v1:';
 export function profileFor(storage,key) {
  const p=read(storage,`${PREFIX}player:${encodeURIComponent(key)}`,{});
  return {best:Number.isSafeInteger(p.best)&&p.best>=0?p.best:0,runs:Number.isSafeInteger(p.runs)&&p.runs>=0?p.runs:0,wins:Number.isSafeInteger(p.wins)&&p.wins>=0?p.wins:0};

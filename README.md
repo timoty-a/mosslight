@@ -1,8 +1,8 @@
-# Relic Keepers
+# Mosslight
 
 A character action game in a forgotten sanctuary. Choose Fern, Ember, or Aurelia; defeat five encounters, awaken relics, and face the Hollow Guardian.
 
-**[Play the public guest demo](https://timoty-a.github.io/relic-keepers/)** · Game folder name: **`relic-keepers`**
+**[Play the public guest demo](https://timoty-a.github.io/mosslight/)** · Game folder name: **`mosslight`**
 
 ## Play
 

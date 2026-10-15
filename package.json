@@ -1,1 +1,1 @@
-{"name":"relic-keepers","version":"1.1.0","private":true,"type":"module","scripts":{"dev":"node scripts/serve.mjs","build":"node scripts/package.mjs","preview":"node scripts/serve.mjs","test":"node --test src/*.test.js"},"engines":{"node":">=22"}}
+{"name":"mosslight","version":"1.1.0","private":true,"type":"module","scripts":{"dev":"node scripts/serve.mjs","build":"node scripts/package.mjs","preview":"node scripts/serve.mjs","test":"node --test src/*.test.js"},"engines":{"node":">=22"}}

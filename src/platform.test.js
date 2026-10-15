@@ -1,14 +1,14 @@
 import test from 'node:test';import assert from 'node:assert/strict';
 import {createPlatformBridge,findStartNg} from './platform.js';
 function target(extra={}){const handlers=new Map();return {...extra,addEventListener(t,fn){if(!handlers.has(t))handlers.set(t,new Set());handlers.get(t).add(fn);},removeEventListener(t,fn){handlers.get(t)?.delete(fn);},emit(t,e={}){for(const f of handlers.get(t)||[])f(e);}};}
-function setup(hostname='relic-keepers.start.localhost',timeoutMs=80){
+function setup(hostname='mosslight.start.localhost',timeoutMs=80){
  const messages=[],frames=[];const win=target({setTimeout,clearTimeout,crypto:{randomUUID:()=>String(Math.random())}});
  const doc=target({visibilityState:'visible',body:{append(f){frames.push(f);}},createElement(){return target({contentWindow:{postMessage:(message,origin)=>messages.push({message,origin})},remove(){}});}});
  const loc={hostname,href:`http://${hostname}:8787/`};const bridge=createPlatformBridge({window:win,document:doc,location:loc,timeoutMs,pollIntervalMs:0});
  const load=()=>frames[0].emit('load');const reply=(user,extra={})=>win.emit('message',{origin:bridge.START_NG,source:frames[0].contentWindow,data:{type:'startng:user',requestId:messages.at(-1).message.requestId,user},...extra});
  return {bridge,win,doc,loc,messages,frames,load,reply};
 }
-test('platform detection rejects lookalike hosts',()=>{assert.equal(findStartNg('relic-keepers.start.ng'),'https://start.ng');assert.equal(findStartNg('relic-keepers.start.localhost'),'http://start.localhost:5173');for(const host of ['timoty-a.github.io','start.ng.evil.test','evilstart.ng','localhost'])assert.equal(findStartNg(host),null);});
+test('platform detection rejects lookalike hosts',()=>{assert.equal(findStartNg('mosslight.start.ng'),'https://start.ng');assert.equal(findStartNg('mosslight.start.localhost'),'http://start.localhost:5173');for(const host of ['timoty-a.github.io','start.ng.evil.test','evilstart.ng','localhost'])assert.equal(findStartNg(host),null);});
 test('off-platform is guest only and creates no iframe',async()=>{const s=setup('timoty-a.github.io');assert.equal(await s.bridge.getCurrentUser(),null);assert.equal(s.frames.length,0);assert.equal(s.bridge.signIn(),false);s.bridge.dispose();});
 test('exact origin, iframe source and request ID are all required',async()=>{const s=setup();const p=s.bridge.getCurrentUser();s.load();const id=s.messages[0].message.requestId;for(const extra of [{origin:'https://evil.test'},{source:{}},{data:{type:'startng:user',requestId:id+'wrong',user:null}}])s.reply(null,extra);s.reply({id:7,name:'Keeper',style:{hat:'crown'},email:'private@example.com',token:'secret'});assert.deepEqual(await p,{id:7,name:'Keeper',style:{hat:'crown'}});s.bridge.dispose();});
 test('a matching null reply is a confirmed signed-out state',async()=>{const s=setup();const p=s.bridge.getCurrentUser();s.load();s.reply(null);assert.equal(await p,null);s.bridge.dispose();});

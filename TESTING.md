@@ -1,6 +1,6 @@
 # start.ng integration verification
 
-The public GitHub Pages game is a guest demo. The start.ng integration is tested locally; production publication at `relic-keepers.start.ng` is a separate release step and is not claimed here.
+The public GitHub Pages game is a guest demo. The start.ng integration is tested locally; production publication at `mosslight.start.ng` is a separate release step and is not claimed here.
 
 ## Local environment
 
@@ -27,7 +27,7 @@ Upload each of the seven game files listed in README with:
 
 ```bash
 npx -y wrangler@4.145.0 r2 object put \
-  "startng-games-local/relic-keepers/<relative-path>" \
+  "startng-games-local/mosslight/<relative-path>" \
   --file "<game-folder>/<relative-path>" --local -c wrangler.local.toml
 ```
 
@@ -37,7 +37,7 @@ Run the actual Worker:
 npx -y wrangler@4.145.0 dev -c wrangler.local.toml --port 8787 --ip 127.0.0.1
 ```
 
-Open **http://relic-keepers.start.localhost:8787/**. Do not open the bare Worker address. Local R2 and the local database do not publish anything to production.
+Open **http://mosslight.start.localhost:8787/**. Do not open the bare Worker address. Local R2 and the local database do not publish anything to production.
 
 ## Browser checklist
 
