@@ -1,0 +1,6 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {withinSlash,clampArena,angleDelta,applyBlessing,WAVES,HEROES} from './rules.js';
+test('sword hits targets in front within range, not enemies behind',()=>{assert.ok(withinSlash(0,0,0,0,3));assert.ok(!withinSlash(0,0,0,0,-3));assert.ok(!withinSlash(0,0,0,0,5));assert.ok(withinSlash(0,0,Math.PI/2,3,0));});
+test('diagonal movement remains inside the sanctuary',()=>{const p=clampArena(20,20);assert.ok(Math.abs(Math.hypot(p.x,p.z)-13.4)<1e-8);assert.deepEqual(clampArena(2,3),{x:2,z:3});});
+test('turning uses shortest route across angle boundary',()=>{assert.ok(Math.abs(angleDelta(-Math.PI+.1,Math.PI-.1)-.2)<1e-8);});
+test('blessings change combat stats and heart fully heals',()=>{const s={damage:20,maxHp:100,hp:15,attackDelay:.4,dodgeDelay:3};assert.equal(applyBlessing(s,'blade').damage,26);assert.equal(applyBlessing(s,'heart').hp,130);assert.equal(s.hp,15);assert.ok(applyBlessing(s,'wind').attackDelay<.4);});
+test('the adventure has five encounters and a final boss',()=>{assert.equal(WAVES.length,5);assert.ok(WAVES[4].enemies.includes('boss'));assert.equal(Object.keys(HEROES).length,3);for(const h of Object.values(HEROES))assert.ok(h.maxHp>0&&h.damage>0&&h.speed>0);});
