@@ -73,7 +73,7 @@ src/style.css
 public/favicon.svg
 ```
 
-The game root is ready for the platform's public GitHub repository uploader. `npm run build` is optional: it only copies these seven files into `dist/` for GitHub Pages or packaging. Tests, tooling, `.git`, `.env`, and `node_modules` are not game assets.
+The game root is ready for the platform's public GitHub repository uploader. `npm run build` is optional: it only copies these eight files into `dist/` for GitHub Pages or packaging. Tests, tooling, `.git`, `.env`, and `node_modules` are not game assets.
 
 For local Worker setup, browser verification, and remaining release steps, see [TESTING.md](TESTING.md).
 

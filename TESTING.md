@@ -23,7 +23,7 @@ binding = "GAMES_BUCKET"
 bucket_name = "startng-games-local"
 ```
 
-Upload each of the seven game files listed in README with:
+Upload each of the eight game files listed in README with:
 
 ```bash
 npx -y wrangler@4.145.0 r2 object put \
@@ -68,6 +68,10 @@ Google OAuth and real production hosting credentials are not needed for the disp
 - Primary/secondary/skin colour changes, a crown/backpack, cap/glasses, and beanie/scarf checked against the real saved character.
 - Central changes reached the already-open game without reloading. Sign-out restored Guest and removed the hat/accessory through the visible-tab fallback check. Focus/visibility event handling and no-answer preservation are also covered by automated tests.
 - Guest-only behaviour on an ordinary localhost origin. A completed Guest run saved 150 points; the Scores dialog retained the record after reloading. Account score isolation is also covered by automated checks.
-- 18 automated checks passed; the seven-file static package and relative paths checked.
+- 18 automated checks passed; the eight-file static package and relative paths checked.
 
 Not tested here: real Google OAuth, a real production start.ng publication, or the live production cross-subdomain session. The local test uses a disposable email account and does not alter your real start.ng account.
+
+## Live release — 15 October 2026
+
+Published as Mosslight at https://mosslight.start.ng from https://github.com/timoty-a/mosslight. The live page recognized Timothy and loaded the sanctuary. A real game-scene screenshot ships as cover.jpg for the start.ng card. Full production sign-out/style-change testing has not been repeated.
