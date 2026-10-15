@@ -1,79 +1,87 @@
 # Relic Keepers
 
-**A little hero. A great adventure.** An original Three.js action game set in a forgotten, moss-covered sanctuary. Choose a keeper, fight monsters with a sword, dodge their attacks, awaken relics, and face the Hollow Guardian.
+A character action game in a forgotten sanctuary. Choose Fern, Ember, or Aurelia; defeat five encounters, awaken relics, and face the Hollow Guardian.
 
-**[Play Relic Keepers](https://timoty-a.github.io/relic-keepers/)**
+**[Play the public guest demo](https://timoty-a.github.io/relic-keepers/)** · Game folder name: **`relic-keepers`**
 
-## Meet the keepers
+## Play
 
-| Keeper | Role | Health | Strength |
-| --- | --- | --- | --- |
-| Fern | Wayfarer | 110 | Balanced movement and sword damage |
-| Ember | Swiftblade | 85 | Faster movement and stronger strikes |
-| Aurelia | Guardian | 145 | More health for a forgiving adventure |
+- **WASD / arrows:** move. **Hold J / left click:** sword attack.
+- **Space / Shift:** dodge, with brief invulnerability. **P / Escape:** pause.
+- On mobile, use the direction, attack, and dodge buttons.
+- Defeat the monsters, then walk to the glowing centre to choose a relic blessing. Pink crystals heal you.
+- Fern is balanced; Ember is faster; Aurelia has more health. These roles change combat stats. Your appearance comes from start.ng, or the default Guest look.
 
-## The adventure
+## Run — no build required
 
-Five encounters introduce mosslings, ranged wraiths, stone brutes, and an ancient boss. Enemy warning circles telegraph attacks. Defeat each encounter, then walk to the centre to awaken a relic and choose a blessing:
-
-- **Sunforged blade:** 30% more sword damage.
-- **Heart of the grove:** +30 maximum health and a full heal.
-- **Windwalker's gift:** faster attacks and quicker dodge recovery.
-
-Defeated enemies can drop pink healing crystals. Each awakened relic also restores 22 health. Defeat all enemies in the final encounter to win.
-
-## Controls
-
-| Action | Desktop | Mobile |
-| --- | --- | --- |
-| Move | WASD or arrow keys | Direction buttons |
-| Attack | Hold J or hold the left mouse button over the arena | Hold ATTACK |
-| Dodge | Space or Shift | DODGE button |
-| Aim | Automatically faces nearby enemies; move mouse to aim manually | Automatic |
-| Pause / resume | P or Escape | Pause button |
-
-Movement follows the screen's directions. Dodge grants brief invulnerability and recharges between uses. The game pauses when its tab loses focus.
-
-## Local development
-
-Node.js **20.19+ or 22.12+** required.
+This repository's top-level `index.html` is already playable. Serve the folder with any static server, for example:
 
 ```bash
-npm ci
-npm run dev
+python3 -m http.server 5175 --bind 127.0.0.1
 ```
 
-Open `http://127.0.0.1:5175`.
+Open `http://127.0.0.1:5175`. Alternatively, with Node 22+, run `npm run dev`.
+
+Three.js is pinned to **0.180.0** in an import map on jsDelivr. DM Sans and Manrope load from Google Fonts with system fallbacks. Internet access is needed for Three.js. Game assets use relative paths. No game backend, bundler, secrets, or environment file is required.
+
+## start.ng connection
+
+`src/platform.js` exports `START_NG`, `getCurrentUser()`, `onUserChange(fn)`, and `signIn()`.
+
+- Under `*.start.ng`, it connects to `https://start.ng/connect` in a hidden iframe.
+- Under `*.start.localhost`, it connects to `http://start.localhost:5173/connect`.
+- Elsewhere, including GitHub Pages, the game is guest-only and explains that sign-in is unavailable.
+- `startng:whoami` requests have unique request IDs. Replies must have the exact origin, iframe source, matching ID, and `startng:user` type.
+- `null` means signed out; a timeout means **no answer** and never clears an established player. The entire request, including iframe loading, is bounded to 3 seconds.
+- Sign-in goes to start.ng with the exact game URL in `return_to`.
+- The game rechecks on focus and visible-tab changes. A 15-second visible-tab fallback also catches changes when an embedded browser does not report focus.
+- The game receives only the player's ID, name, and style. It never requests passwords, tokens, or emails, and never calls the start.ng API.
+
+Signed-out platform players get **Sign in with start.ng** and **Play as guest**. Signed-in players see their name. Confirmed sign-out restores the Guest appearance; an active run pauses on account changes.
+
+## Central character style
+
+| Field | Game appearance |
+| --- | --- |
+| `primaryColor` | Tunic, cape, sleeves, hat accents |
+| `secondaryColor` | Trousers, hair base, accessory details |
+| `skinColor` | Face, neck, hands |
+| `hat` | none, cap, beanie, tophat, crown |
+| `accessory` | none, glasses, scarf, backpack |
+
+Missing, malformed, or unknown values fall back safely. All required hats/accessories have visible 3D geometry. New platform values such as hair or accessory variants can be added without breaking older games. Keepers remain combat classes; selecting a different keeper does not overwrite your central style.
+
+## Scores
+
+**Scores** shows the five highest local player records. Each start.ng user ID has its own personal best, adventure count, and wins; Guest has a separate record. The board retains up to ten player records in this browser. Records are specific to the game origin and are not a global or server leaderboard.
+
+Score: `100 × foes + 250 × relics + 150 × encounter reached + 1500 for victory`.
+
+A run's score belongs to the player who started it, even if the account changes mid-run. Signed-in names are rendered as text. Blocked or corrupt local storage does not prevent play.
+
+## Upload
+
+Upload these files with their relative paths intact:
+
+```text
+index.html
+src/main.js
+src/rules.js
+src/platform.js
+src/player.js
+src/style.css
+public/favicon.svg
+```
+
+The game root is ready for the platform's public GitHub repository uploader. `npm run build` is optional: it only copies these seven files into `dist/` for GitHub Pages or packaging. Tests, tooling, `.git`, `.env`, and `node_modules` are not game assets.
+
+For local Worker setup, browser verification, and remaining release steps, see [TESTING.md](TESTING.md).
+
+## Checks
 
 ```bash
 npm test
 npm run build
-npm run preview
 ```
 
-## Technical notes
-
-- Three.js + Vite + plain JavaScript, HTML, and CSS.
-- Fixed-step combat simulation, sword hit cones, enemy separation, knockback, wind-up attacks, ranged projectiles, and a two-pattern boss.
-- Original code-generated characters, sword animations, dodge rolls, ruins, trees, particles, icons, and synthesized sound. No downloaded 3D models or texture packs.
-- Instanced floor tiles and vegetation. Shared geometry and materials for reusable assets.
-- DM Sans and Manrope from Google Fonts, with system font fallbacks.
-- Character choice and victory count persist locally when browser storage is available. No accounts or global leaderboard in this demo.
-- GitHub Actions tests and builds the game, then deploys `dist/` to GitHub Pages. Pages must use GitHub Actions as its source.
-
-## start.ng
-
-This public version runs as a **guest demo**. It is not deployed on start.ng and does not claim to fulfil the assignment's authenticated-player or central-styling requirements yet.
-
-An optional proposed adapter accepts presentation data from the real authenticated platform host:
-
-```js
-window.RelicKeepers.setSession({
-  user: { id: 'actual-platform-user-id', name: 'Player name' },
-  appearance: { primaryColor: '#397f70' }
-});
-```
-
-For an iframe, the game emits `{ type: 'relic-keepers:ready', version: 1 }`. A trusted parent can send `{ type: 'startng:session', session: { user, appearance } }` to the game's exact origin. Accepted parent origins are `https://start.ng`, `https://www.start.ng`, and `http://localhost:5173`. Both the message origin and actual parent window are checked. Never send JWTs or other credentials to the game.
-
-`primaryColor` must be a six-digit hex colour and changes the keeper's clothing. This contract is a proposed integration point, not an official start.ng SDK. The team must connect the real authenticated player and appearance source, confirm publishing requirements, and test the deployed game on start.ng.
+Node 22+ is needed only for these developer helpers. GitHub Actions tests, packages, and deploys the guest demo to GitHub Pages. All 3D assets, animations, and sounds are generated in code.
