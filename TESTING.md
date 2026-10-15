@@ -67,7 +67,7 @@ Google OAuth and real production hosting credentials are not needed for the disp
 - Signed-out choices → Guest gameplay → platform email sign-in → automatic return to the game with the disposable test player's name and look.
 - Primary/secondary/skin colour changes, a crown/backpack, cap/glasses, and beanie/scarf checked against the real saved character.
 - Central changes reached the already-open game without reloading. Sign-out restored Guest and removed the hat/accessory through the visible-tab fallback check. Focus/visibility event handling and no-answer preservation are also covered by automated tests.
-- Guest-only behaviour on an ordinary localhost origin; local scores and storage isolation covered by automated checks.
+- Guest-only behaviour on an ordinary localhost origin. A completed Guest run saved 150 points; the Scores dialog retained the record after reloading. Account score isolation is also covered by automated checks.
 - 18 automated checks passed; the seven-file static package and relative paths checked.
 
 Not tested here: real Google OAuth, a real production start.ng publication, or the live production cross-subdomain session. The local test uses a disposable email account and does not alter your real start.ng account.

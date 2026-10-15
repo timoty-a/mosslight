@@ -211,6 +211,7 @@ function renderAccount() {
  $('sign-in').hidden=!START_NG||!!currentUser;
  $('begin').disabled=!identityReady;
  $('begin').firstElementChild.textContent=currentUser?'Enter the sanctuary':'Play as guest';
+ if($('scores-dialog').open)refreshScores();
 }
 function setPlayer(user) {
  if(user===undefined){identityUnavailable=true;identityReady=true;renderAccount();return;}
